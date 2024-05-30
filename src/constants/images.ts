@@ -4,4 +4,9 @@ const OnBoarding = {
     women: require("../../assets/imgs/onboarding/wome.png"),
 }
 
-export default { OnBoarding };
+
+const Auth = {
+    login: require("../../assets/imgs/login/login.png")
+}
+
+export default { OnBoarding, Auth };

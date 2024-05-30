@@ -1,0 +1,17 @@
+{
+  "migIndex": 1,
+  "data": [
+    {
+      "path": "assets/fonts/common-Bold.ttf",
+      "sha1": "a0fef8f5726fb43db9fbfe51fa1802f075464dd1"
+    },
+    {
+      "path": "assets/fonts/Inika-Bold.ttf",
+      "sha1": "6f6ddd9101be0f0c8fe7bdeeda675584acafdb74"
+    },
+    {
+      "path": "assets/fonts/Inika-Regular.ttf",
+      "sha1": "007b7a7b281cb74d1aea72859e87bdd1aae39a37"
+    }
+  ]
+}

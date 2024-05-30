@@ -6,8 +6,8 @@ import { Block, Button, Icon, Input } from 'galio-framework';
 import { Utils, Images, Theme } from '../../constants';
 
 
-type LoginProps = AuthStackProps<"login">;
-export default function Login(props: LoginProps) {
+type OtpProps = AuthStackProps<"otp">;
+export default function Otp(props: OtpProps) {
   const { navigation } = props;
   return (
     <SafeAreaView style={{ flex: 1 }}>

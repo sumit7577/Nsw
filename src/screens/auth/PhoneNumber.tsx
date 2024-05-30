@@ -6,8 +6,8 @@ import { Block, Button, Icon, Input } from 'galio-framework';
 import { Utils, Images, Theme } from '../../constants';
 
 
-type LoginProps = AuthStackProps<"login">;
-export default function Login(props: LoginProps) {
+type PhoneProps = AuthStackProps<"phoneNumber">;
+export default function PhoneNumber(props: PhoneProps) {
   const { navigation } = props;
   return (
     <SafeAreaView style={{ flex: 1 }}>
@@ -19,13 +19,9 @@ export default function Login(props: LoginProps) {
           </Block>
 
           <Block>
-            <Block right>
-              <Image source={Images.Auth.login}
-                style={{ height: 120, width: 120, resizeMode: "contain" }} />
-            </Block>
-            <Block style={{ gap: 8 }}>
-              <Text style={styles.textTitle}>Log In</Text>
-              <Text style={[styles.textTitle, { fontSize: 14, paddingHorizontal: "4%" }]}>Please enter your details below log in page</Text>
+            <Block>
+              <Text style={styles.textTitle}>Continue with</Text>
+              <Text style={styles.textTitle}>Phone</Text>
             </Block>
           </Block>
 
@@ -102,7 +98,7 @@ const styles = StyleSheet.create({
     flex: 1
   },
   textTitle: {
-    fontSize: 34,
+    fontSize: 20,
     color: Theme.COLORS.WHITE,
     fontFamily: Theme.FONTFAMILY.BOLD
   }

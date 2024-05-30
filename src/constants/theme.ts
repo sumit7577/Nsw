@@ -3,18 +3,15 @@ import { Dimensions } from "react-native";
 const { height, width } = Dimensions.get("window");
 
 const FONTFAMILY = {
-    REGULAR: "common-Regular",
-    BOLD: "common-Bold",
-    MEDIUM: "common-Medium",
-    LIGHT: "common-Light",
-    EXTRABOLD: "common-ExtraBold",
-    BLACK: "common-Black"
+    REGULAR: "Inika-Regular",
+    BOLD: "Inika-Bold",
+    CBOLD: "common-Bold",
 }
 
 const COLORS = {
     THEME: "#0168b3",
     DEFAULT: '#888888',
-    PRIMARY: '#f96332',
+    PRIMARY: '#DE3163',
     LABEL: '#ABA7A7',
     INFO: '#F5F5F5',
     ERROR: '#FF3636',
