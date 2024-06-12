@@ -79,13 +79,13 @@ const styles = StyleSheet.create({
     text: {
         color: Theme.COLORS.WHITE,
         fontSize: 22,
-        fontWeight: "700",
         fontFamily: Theme.FONTFAMILY.BOLD
     },
     description: {
         fontSize: 14,
         color: Theme.COLORS.WHITE,
-        paddingHorizontal:"8%"
+        paddingHorizontal:"8%",
+        fontFamily:Theme.FONTFAMILY.REGULAR
     },
     header: {
         flex: 1

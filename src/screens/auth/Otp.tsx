@@ -4,6 +4,7 @@ import { AuthStackProps } from '../../navigators/authStack';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Block, Button, Icon, Input } from 'galio-framework';
 import { Utils, Images, Theme } from '../../constants';
+import { OtpInput } from "react-native-otp-entry";
 
 
 type OtpProps = AuthStackProps<"otp">;
@@ -18,61 +19,34 @@ export default function Otp(props: OtpProps) {
             <Icon family="Entypo" name="chevron-left" size={25} />
           </Block>
 
-          <Block>
-            <Block right>
-              <Image source={Images.Auth.login}
-                style={{ height: 120, width: 120, resizeMode: "contain" }} />
+          <Block style={{ marginTop: "2%", gap: 30 }}>
+            <Block>
+              <Text style={styles.textTitle}>Verify Phone</Text>
+              <Text style={styles.textTitle}>Number</Text>
             </Block>
-            <Block style={{ gap: 8 }}>
-              <Text style={styles.textTitle}>Log In</Text>
-              <Text style={[styles.textTitle, { fontSize: 14, paddingHorizontal: "4%" }]}>Please enter your details below log in page</Text>
+
+            <Block middle gap={8}>
+              <Image source={Images.Auth.otp} style={{ height: 120, width: 120 }} />
+              <Text style={[styles.textTitle, { fontSize: 15, fontFamily: Theme.FONTFAMILY.REGULAR }]}>Enter the code</Text>
             </Block>
           </Block>
 
         </View>
         <View style={styles.body}>
-          <Block>
-            <Text style={[styles.textTitle, { fontSize: 14, paddingLeft: "4%" }]}>Email</Text>
-            <Input
-              placeholder='Email'
-              rounded
-              style={{ borderRadius: 18 }}
-              left
-              icon='email'
-              family="MaterialCommunityIcons"
-              textInputStyle={[styles.textTitle, { fontSize: 14, color: Theme.COLORS.BLACK }]}
-            />
-          </Block>
-
-
-          <Block>
-            <Text style={[styles.textTitle, { fontSize: 14, paddingLeft: "4%" }]}>Password</Text>
-            <Input
-              placeholder='Password'
-              left
-              icon="lock"
-              family="Foundation"
-              iconSize={20}
-              style={{ borderRadius: 18 }}
-              password
-              viewPass
-              iconColor={Theme.COLORS.BORDER_COLOR}
-              textInputStyle={[styles.textTitle, { fontSize: 14, color: Theme.COLORS.BLACK }]}
-            />
-            <Text style={[styles.textTitle, { fontSize: 15, textAlign: "right" }]}>Forgot Password</Text>
-          </Block>
-
-        </View>
-        <View style={styles.footer}>
-          <Block middle gap={Utils.width / 6}>
-            <Button round color={Theme.COLORS.WHITE} style={{ width: "100%" }}>
-              <Text style={[styles.textTitle, { fontSize: 15, color: Theme.COLORS.ACTIVE }]}>Login</Text>
-            </Button>
-            <Text style={[styles.textTitle, { fontSize: 14 }]}>Don’t have an account? <Text onPress={() => {
-              navigation.navigate("register");
+          <Block center style={{ paddingHorizontal: "15%" }}>
+            <OtpInput numberOfDigits={4} theme={{
+              pinCodeTextStyle: {
+                color: Theme.COLORS.BLACK,
+                fontFamily: Theme.FONTFAMILY.BOLD
+              }
             }}
-              style={{ color: Theme.COLORS.BLACK }}
-            >Sign up</Text></Text>
+              onTextChange={(text) => console.log(text)} />
+          </Block>
+
+          <Block middle style={{marginTop:"8%"}}>
+            <Button color={Theme.COLORS.WHITE} style={{borderRadius:18,height:50,width:Utils.width/2}}>
+              <Text style={[styles.textTitle, { fontSize: 14, color: Theme.COLORS.BLACK }]}>Create the Account</Text>
+            </Button>
           </Block>
 
         </View>
@@ -92,18 +66,32 @@ const styles = StyleSheet.create({
     paddingVertical: "2%",
   },
   header: {
-    flex: 1,
   },
   body: {
-    flex: 1,
-    gap: 40
-  },
-  footer: {
-    flex: 1
+    marginTop: "15%"
   },
   textTitle: {
-    fontSize: 34,
+    fontSize: 20,
     color: Theme.COLORS.WHITE,
     fontFamily: Theme.FONTFAMILY.BOLD
-  }
+  },
+  borderStyleBase: {
+    width: 30,
+    height: 45
+  },
+
+  borderStyleHighLighted: {
+    borderColor: "#03DAC6",
+  },
+
+  underlineStyleBase: {
+    width: 30,
+    height: 45,
+    borderWidth: 0,
+    borderBottomWidth: 1,
+  },
+
+  underlineStyleHighLighted: {
+    borderColor: "#03DAC6",
+  },
 })

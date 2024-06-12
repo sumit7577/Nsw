@@ -4,11 +4,16 @@ import { AuthStackProps } from '../../navigators/authStack';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Block, Button, Icon, Input } from 'galio-framework';
 import { Utils, Images, Theme } from '../../constants';
+import AppStorge from '../../constants/database';
 
 
 type LoginProps = AuthStackProps<"login">;
 export default function Login(props: LoginProps) {
   const { navigation } = props;
+
+  const loginUser = () => {
+    AppStorge.setMapAsync("user", { isLoggedIn: true })
+  }
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <View style={styles.container}>
@@ -65,7 +70,7 @@ export default function Login(props: LoginProps) {
         </View>
         <View style={styles.footer}>
           <Block middle gap={Utils.width / 6}>
-            <Button round color={Theme.COLORS.WHITE} style={{ width: "100%" }}>
+            <Button round color={Theme.COLORS.WHITE} style={{ width: "100%" }} onPress={loginUser}>
               <Text style={[styles.textTitle, { fontSize: 15, color: Theme.COLORS.ACTIVE }]}>Login</Text>
             </Button>
             <Text style={[styles.textTitle, { fontSize: 14 }]}>Don’t have an account? <Text onPress={() => {

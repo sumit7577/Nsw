@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, Image } from 'react-native'
+import { View, Text, StyleSheet, Image, TextInput } from 'react-native'
 import React from 'react'
 import { AuthStackProps } from '../../navigators/authStack';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -18,57 +18,33 @@ export default function PhoneNumber(props: PhoneProps) {
             <Icon family="Entypo" name="chevron-left" size={25} />
           </Block>
 
-          <Block>
+          <Block style={{ marginTop: "2%", gap: 8 }}>
             <Block>
               <Text style={styles.textTitle}>Continue with</Text>
               <Text style={styles.textTitle}>Phone</Text>
+            </Block>
+
+            <Block middle gap={8}>
+              <Image source={Images.Auth.phone} style={{ height: 120, width: 120 }} />
+              <Text style={[styles.textTitle, { fontSize: 15, fontFamily: Theme.FONTFAMILY.REGULAR }]}>Enter your Phone Number</Text>
             </Block>
           </Block>
 
         </View>
         <View style={styles.body}>
-          <Block>
-            <Text style={[styles.textTitle, { fontSize: 14, paddingLeft: "4%" }]}>Email</Text>
+          <Block row style={{ borderWidth: 1, borderRadius: 14, borderColor: Theme.COLORS.WHITE }}>
             <Input
-              placeholder='Email'
-              rounded
-              style={{ borderRadius: 18 }}
-              left
-              icon='email'
-              family="MaterialCommunityIcons"
-              textInputStyle={[styles.textTitle, { fontSize: 14, color: Theme.COLORS.BLACK }]}
+              placeholder='Phone Number'
+              style={{ borderRadius: 18, borderWidth: 0, backgroundColor: Theme.COLORS.PRIMARY, flex: 9 }}
+              textInputStyle={[styles.textTitle, { fontSize: 15, color: Theme.COLORS.WHITE }]}
+              type="phone-pad"
+              maxLength={10}
+              placeholderTextColor={Theme.COLORS.WHITE}
             />
-          </Block>
-
-
-          <Block>
-            <Text style={[styles.textTitle, { fontSize: 14, paddingLeft: "4%" }]}>Password</Text>
-            <Input
-              placeholder='Password'
-              left
-              icon="lock"
-              family="Foundation"
-              iconSize={20}
-              style={{ borderRadius: 18 }}
-              password
-              viewPass
-              iconColor={Theme.COLORS.BORDER_COLOR}
-              textInputStyle={[styles.textTitle, { fontSize: 14, color: Theme.COLORS.BLACK }]}
-            />
-            <Text style={[styles.textTitle, { fontSize: 15, textAlign: "right" }]}>Forgot Password</Text>
-          </Block>
-
-        </View>
-        <View style={styles.footer}>
-          <Block middle gap={Utils.width / 6}>
-            <Button round color={Theme.COLORS.WHITE} style={{ width: "100%" }}>
-              <Text style={[styles.textTitle, { fontSize: 15, color: Theme.COLORS.ACTIVE }]}>Login</Text>
+            <Button color={Theme.COLORS.WHITE} onPress={() => navigation.navigate("otp")}
+              round style={{ flex: 1, borderRadius: 15, margin: 0, height: Utils.height / 15 }}>
+              <Text style={[styles.textTitle, { color: Theme.COLORS.PRIMARY, fontSize: 16 }]}>Continue</Text>
             </Button>
-            <Text style={[styles.textTitle, { fontSize: 14 }]}>Don’t have an account? <Text onPress={() => {
-              navigation.navigate("register");
-            }}
-              style={{ color: Theme.COLORS.BLACK }}
-            >Sign up</Text></Text>
           </Block>
 
         </View>
@@ -88,14 +64,9 @@ const styles = StyleSheet.create({
     paddingVertical: "2%",
   },
   header: {
-    flex: 1,
   },
   body: {
-    flex: 1,
-    gap: 40
-  },
-  footer: {
-    flex: 1
+    marginTop: "15%"
   },
   textTitle: {
     fontSize: 20,

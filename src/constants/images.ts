@@ -6,7 +6,9 @@ const OnBoarding = {
 
 
 const Auth = {
-    login: require("../../assets/imgs/login/login.png")
+    login: require("../../assets/imgs/login/login.png"),
+    phone: require("../../assets/imgs/login/phone.png"),
+    otp: require("../../assets/imgs/login/otp.png")
 }
 
 export default { OnBoarding, Auth };
