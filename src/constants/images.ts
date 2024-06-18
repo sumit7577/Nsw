@@ -11,4 +11,15 @@ const Auth = {
     otp: require("../../assets/imgs/login/otp.png")
 }
 
-export default { OnBoarding, Auth };
+const Home = {
+    profile_picture: require("../../assets/imgs/home/profile_picture.png"),
+    homepage_landing: require("../../assets/imgs/home/home_land.png"),
+    courses: require("../../assets/imgs/home/courses.png"),
+    booking_offer: require("../../assets/imgs/home/booking_offer.png"),
+    placement: require("../../assets/imgs/home/placement.png"),
+    logo: require("../../assets/imgs/logo/VIT.png"),
+    course_screen: require("../../assets/imgs/home/course.png")
+
+}
+
+export default { OnBoarding, Auth, Home };

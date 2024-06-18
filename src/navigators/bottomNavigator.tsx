@@ -6,7 +6,10 @@ import { Icon } from "galio-framework";
 
 
 type TabParamList = {
-    Home: undefined
+    Home: undefined,
+    Course: undefined,
+    Search: undefined,
+    Message: undefined,
 }
 
 const Tab = createBottomTabNavigator<TabParamList>();
@@ -14,24 +17,24 @@ const Tab = createBottomTabNavigator<TabParamList>();
 interface iconsProp {
     name: string,
     focused: boolean
-  }
-  
-  const Icons: React.FC<iconsProp> = (props) => {
+}
+
+const Icons: React.FC<iconsProp> = (props) => {
     const { name, focused } = props;
     if (props.name === "Home") {
-      return <Icon name="home" family="AntDesign" color={focused ? Theme.COLORS.BLACK : Theme.COLORS.MUTED} size={30} />
+        return <Icon name="home-filled" family="MaterialIcons" color={focused ? Theme.COLORS.BLACK : Theme.COLORS.MUTED} size={30} />
     }
-    else if (name === "Cart") {
-      return <Icon name="shoppingcart" family="AntDesign" color={focused ? Theme.COLORS.BLACK : Theme.COLORS.MUTED} size={30} />
+    else if (name === "Course") {
+        return <Icon name="book" family="Foundation" color={focused ? Theme.COLORS.BLACK : Theme.COLORS.MUTED} size={30} />
     }
-    else if (name === "Profile") {
-      return <Icon name="hearto" family="AntDesign" color={focused ? Theme.COLORS.BLACK : Theme.COLORS.MUTED} size={30} />
+    else if (name === "Search") {
+        return <Icon name="search" family="EvilIcons" color={focused ? Theme.COLORS.BLACK : Theme.COLORS.MUTED} size={30} />
     }
     else {
-      return <Icon name="home" family="AntDesign" color={focused ? Theme.COLORS.BLACK : Theme.COLORS.MUTED} size={26} />
+        return <Icon name="message" family="Entypo" color={focused ? Theme.COLORS.BLACK : Theme.COLORS.MUTED} size={26} />
     }
-  }
-  
+}
+
 
 function CustomBar(props: BottomTabBarProps) {
     const { state, descriptors, navigation } = props;
@@ -96,6 +99,9 @@ const BottomTabNavigator = () => {
             headerShown: false
         }}>
             <Tab.Screen name="Home" component={Home} />
+            <Tab.Screen name="Course" component={Home} />
+            <Tab.Screen name="Search" component={Home} />
+            <Tab.Screen name="Message" component={Home} />
         </Tab.Navigator>
     )
 }
