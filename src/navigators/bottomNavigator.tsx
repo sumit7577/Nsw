@@ -1,8 +1,9 @@
 import { BottomTabBarProps, createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { TouchableOpacity, View } from "react-native";
 import { Theme, Utils } from "../constants";
-import { Home } from "../screens/home";
+import { Home,Courses } from "../screens/home";
 import { Icon } from "galio-framework";
+import Enrollment from "../screens/home/Enrollment";
 
 
 type TabParamList = {
@@ -99,8 +100,8 @@ const BottomTabNavigator = () => {
             headerShown: false
         }}>
             <Tab.Screen name="Home" component={Home} />
-            <Tab.Screen name="Course" component={Home} />
-            <Tab.Screen name="Search" component={Home} />
+            <Tab.Screen name="Course" component={Courses} />
+            <Tab.Screen name="Search" component={Enrollment} />
             <Tab.Screen name="Message" component={Home} />
         </Tab.Navigator>
     )

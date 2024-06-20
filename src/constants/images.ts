@@ -18,8 +18,9 @@ const Home = {
     booking_offer: require("../../assets/imgs/home/booking_offer.png"),
     placement: require("../../assets/imgs/home/placement.png"),
     logo: require("../../assets/imgs/logo/VIT.png"),
-    course_screen: require("../../assets/imgs/home/course.png")
-
+    course_screen: require("../../assets/imgs/home/course.png"),
+    devops: require("../../assets/imgs/home/devops.png"),
+    enrollment: require("../../assets/imgs/home/enrollment.png")
 }
 
 export default { OnBoarding, Auth, Home };

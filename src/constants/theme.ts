@@ -11,7 +11,7 @@ const FONTFAMILY = {
 const COLORS = {
     THEME: "#0168b3",
     DEFAULT: '#888888',
-    PRIMARY: '#DE3163',
+    PRIMARY: 'rgba(222, 49, 98,1)',
     LABEL: '#ABA7A7',
     INFO: '#F5F5F5',
     ERROR: '#FF3636',
