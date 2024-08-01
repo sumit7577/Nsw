@@ -16,7 +16,7 @@ export default function Otp(props: OtpProps) {
         <View style={styles.header}>
 
           <Block height={30} width={30} middle style={{ backgroundColor: Theme.COLORS.WHITE, borderRadius: 15 }}>
-            <Icon family="Entypo" name="chevron-left" size={25} />
+            <Icon family="Entypo" name="chevron-left" size={22} color={Theme.COLORS.MUTED} />
           </Block>
 
           <Block style={{ marginTop: "2%", gap: 30 }}>

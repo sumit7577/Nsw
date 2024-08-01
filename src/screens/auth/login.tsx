@@ -20,7 +20,7 @@ export default function Login(props: LoginProps) {
         <View style={styles.header}>
 
           <Block height={30} width={30} middle style={{ backgroundColor: Theme.COLORS.WHITE, borderRadius: 15 }}>
-            <Icon family="Entypo" name="chevron-left" size={25} />
+            <Icon family="Entypo" name="chevron-left" size={22} color={Theme.COLORS.MUTED}/>
           </Block>
 
           <Block>
@@ -39,7 +39,6 @@ export default function Login(props: LoginProps) {
           <Block>
             <Text style={[styles.textTitle, { fontSize: 14, paddingLeft: "4%" }]}>Email</Text>
             <Input
-              placeholder='Email'
               rounded
               style={{ borderRadius: 18 }}
               left
@@ -53,7 +52,6 @@ export default function Login(props: LoginProps) {
           <Block>
             <Text style={[styles.textTitle, { fontSize: 14, paddingLeft: "4%" }]}>Password</Text>
             <Input
-              placeholder='Password'
               left
               icon="lock"
               family="Foundation"

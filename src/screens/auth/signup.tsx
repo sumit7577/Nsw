@@ -17,9 +17,10 @@ export default function Signup(props: SignupProps) {
         <View style={styles.header}>
 
           <Block height={30} width={30} middle style={{ backgroundColor: Theme.COLORS.WHITE, borderRadius: 15 }}>
-            <Icon family="Entypo" name="chevron-left" size={25} onPress={() => {
-              navigation.goBack()
-            }} />
+            <Icon family="Entypo" name="chevron-left" size={22}
+              color={Theme.COLORS.MUTED} onPress={() => {
+                navigation.goBack()
+              }} />
           </Block>
 
           <Block>
@@ -38,7 +39,6 @@ export default function Signup(props: SignupProps) {
           <Block>
             <Text style={[styles.textTitle, { fontSize: 14, paddingLeft: "4%" }]}>Email</Text>
             <Input
-              placeholder='Email'
               rounded
               style={{ borderRadius: 18 }}
               left
@@ -51,14 +51,13 @@ export default function Signup(props: SignupProps) {
           <Block>
             <Text style={[styles.textTitle, { fontSize: 14, paddingLeft: "4%" }]}>Phone Number</Text>
             <Input
-              placeholder='Phone number'
               rounded
               style={{ borderRadius: 18 }}
               maxLength={10}
               type="phone-pad"
               left
-              icon='email'
-              family="MaterialCommunityIcons"
+              icon='call'
+              family="Ionicons"
               textInputStyle={[styles.textTitle, { fontSize: 14, color: Theme.COLORS.BLACK }]}
             />
           </Block>
@@ -67,7 +66,6 @@ export default function Signup(props: SignupProps) {
           <Block>
             <Text style={[styles.textTitle, { fontSize: 14, paddingLeft: "4%" }]}>Password</Text>
             <Input
-              placeholder='Password'
               left
               icon="lock"
               family="Foundation"
@@ -84,7 +82,6 @@ export default function Signup(props: SignupProps) {
           <Block>
             <Text style={[styles.textTitle, { fontSize: 14, paddingLeft: "4%" }]}>Re-Enter Password</Text>
             <Input
-              placeholder='Password'
               left
               icon="lock"
               family="Foundation"
