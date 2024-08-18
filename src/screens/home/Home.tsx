@@ -3,15 +3,21 @@ import React from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { Images, Theme, Utils } from '../../constants'
 import { Block, Icon } from 'galio-framework'
+import userAuth from '../../hooks/auth'
+import { TabProps } from '../../navigators/bottomNavigator'
 
-export default function Home() {
+type HomeProps = TabProps<"Home">
+
+export default function Home(props: HomeProps) {
+  const { user } = userAuth()
+  const { navigation } = props;
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <View style={styles.container}>
         <View style={styles.header}>
           <Block row space='between' middle>
             <Block height={30} width={30} middle style={{ backgroundColor: Theme.COLORS.WHITE, borderRadius: 15 }}>
-              <Icon family="Entypo" name="chevron-left" size={25} />
+              <Icon family="Entypo" name="chevron-left" size={25} onPre/>
             </Block>
             <Block style={{ backgroundColor: Theme.COLORS.WHITE, padding: 4, borderRadius: 8 }}>
               <Image source={Images.Home.logo} style={{ height: 40, width: Utils.width / 2.5 }} resizeMode="contain" />
@@ -24,7 +30,7 @@ export default function Home() {
             <Block row style={{ alignItems: "center" }} gap={10}>
               <Image source={Images.Home.profile_picture} style={{ height: 60, width: 60, resizeMode: "contain" }} />
               <Block>
-                <Text style={[styles.text, { fontSize: 14, color: Theme.COLORS.WHITE }]}>Hi, Priya</Text>
+                <Text style={[styles.text, { fontSize: 14, color: Theme.COLORS.WHITE }]}>Hi, {user?.email}</Text>
                 <Text style={[styles.text, { fontSize: 10, color: Theme.COLORS.WHITE, fontFamily: Theme.FONTFAMILY.REGULAR }]}>Let’s start learning</Text>
               </Block>
             </Block>

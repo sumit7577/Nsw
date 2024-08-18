@@ -20,7 +20,9 @@ const Home = {
     logo: require("../../assets/imgs/logo/VIT.png"),
     course_screen: require("../../assets/imgs/home/course.png"),
     devops: require("../../assets/imgs/home/devops.png"),
-    enrollment: require("../../assets/imgs/home/enrollment.png")
+    enrollment: require("../../assets/imgs/home/enrollment.png"),
+    course1: require("../../assets/imgs/home/courses1.png"),
+    course2: require("../../assets/imgs/home/courses2.png")
 }
 
 export default { OnBoarding, Auth, Home };

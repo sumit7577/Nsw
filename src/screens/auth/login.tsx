@@ -1,26 +1,48 @@
 import { View, Text, StyleSheet, Image } from 'react-native'
-import React from 'react'
+import React, { useState } from 'react'
 import { AuthStackProps } from '../../navigators/authStack';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Block, Button, Icon, Input } from 'galio-framework';
 import { Utils, Images, Theme } from '../../constants';
 import AppStorge from '../../constants/database';
+import { useMutation, useQuery } from 'react-query';
+import { ApiController } from '../../networking';
+import { AppLoader } from '../../components';
 
 
 type LoginProps = AuthStackProps<"login">;
+
 export default function Login(props: LoginProps) {
   const { navigation } = props;
+  const [show, setShow] = useState<boolean>(false);
 
-  const loginUser = () => {
-    AppStorge.setMapAsync("user", { isLoggedIn: true })
+  const [username, setUsername] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+
+  const loginMutation = useMutation({
+    mutationFn: (data: { username: string, password: string }) => {
+      return ApiController.login(data.username, data.password);
+    },
+    onSuccess: (data) => {
+      AppStorge.setMapAsync("user", data.user)
+      AppStorge.setStringAsync("token", data.token)
+    },
+    onError: (data) => {
+      console.log("error", data)
+    }
+  })
+
+  const login = () => {
+    loginMutation.mutate({ username: username, password: password })
   }
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <View style={styles.container}>
+        <AppLoader show={loginMutation.isLoading} />
         <View style={styles.header}>
 
           <Block height={30} width={30} middle style={{ backgroundColor: Theme.COLORS.WHITE, borderRadius: 15 }}>
-            <Icon family="Entypo" name="chevron-left" size={22} color={Theme.COLORS.MUTED}/>
+            <Icon family="Entypo" name="chevron-left" size={22} color={Theme.COLORS.MUTED} />
           </Block>
 
           <Block>
@@ -43,6 +65,9 @@ export default function Login(props: LoginProps) {
               style={{ borderRadius: 18 }}
               left
               icon='email'
+              onChangeText={(text) => {
+                setUsername(() => text)
+              }}
               family="MaterialCommunityIcons"
               textInputStyle={[styles.textTitle, { fontSize: 14, color: Theme.COLORS.BLACK }]}
             />
@@ -59,6 +84,9 @@ export default function Login(props: LoginProps) {
               style={{ borderRadius: 18 }}
               password
               viewPass
+              onChangeText={(text) => {
+                setPassword(() => text)
+              }}
               iconColor={Theme.COLORS.BORDER_COLOR}
               textInputStyle={[styles.textTitle, { fontSize: 14, color: Theme.COLORS.BLACK }]}
             />
@@ -68,7 +96,7 @@ export default function Login(props: LoginProps) {
         </View>
         <View style={styles.footer}>
           <Block middle gap={Utils.width / 6}>
-            <Button round color={Theme.COLORS.WHITE} style={{ width: "100%" }} onPress={loginUser}>
+            <Button round color={Theme.COLORS.WHITE} style={{ width: "100%" }} onPress={login}>
               <Text style={[styles.textTitle, { fontSize: 15, color: Theme.COLORS.ACTIVE }]}>Login</Text>
             </Button>
             <Text style={[styles.textTitle, { fontSize: 14 }]}>Don’t have an account? <Text onPress={() => {

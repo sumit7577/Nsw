@@ -1,23 +1,49 @@
 import { View, Text, StyleSheet, Image, ScrollView } from 'react-native'
-import React from 'react'
+import React, { useRef, useState } from 'react'
 import { Images, Theme, Utils } from '../../constants'
-import { Block, Icon } from 'galio-framework'
+import { Block, Button, Icon } from 'galio-framework'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import RenderHtml from 'react-native-render-html';
+import { TabProps } from '../../navigators/bottomNavigator'
+import { useQuery } from 'react-query'
+import { ApiController } from '../../networking'
+import { AppLoader } from '../../components'
 
+type EnrollmentTypes = TabProps<"Search">
 
-export default function Enrollment() {
-    const htmlContent = `
-    <h1>Here are some bullet points:</h1>
-    <ul>
-      <li>First point</li>
-      <li>Second point</li>
-      <li>Third point</li>
-    </ul>
-  `;
+export default function Enrollment(props: EnrollmentTypes) {
+    const { navigation, route } = props;
+    const { data, isLoading } = useQuery({
+        queryFn: () => {
+            return ApiController.singleCourse(route.params.id)
+        },
+        queryKey: ["courseDetail", route.params.id]
+    })
+    const htmlContent = data?.data.content ?? "";
+    const [isAtEnd, setIsAtEnd] = useState(false);
+    const scrollRef = useRef<ScrollView>(null);
+
+    const handleScroll = (event: { nativeEvent: { layoutMeasurement: any; contentOffset: any; contentSize: any } }) => {
+        const { layoutMeasurement, contentOffset, contentSize } = event.nativeEvent;
+        const isEnd = layoutMeasurement.height + contentOffset.y >= contentSize.height - 20;
+        setIsAtEnd(isEnd);
+    };
+
+    const scrollToBottom = () => {
+        if (scrollRef.current != null) {
+            scrollRef?.current.scrollToEnd({ animated: true });
+        }
+
+    };
+    const proceedToPayment = () => {
+        navigation.navigate("Batch", {
+            course: data!!
+        })
+    }
     return (
         <SafeAreaView style={{ flex: 1 }}>
             <View style={styles.container}>
+                <AppLoader show={isLoading} />
                 <View style={styles.header}>
                     <Block row space='between' middle>
                         <Block height={30} width={30} middle style={{ backgroundColor: Theme.COLORS.WHITE, borderRadius: 15 }}>
@@ -29,16 +55,28 @@ export default function Enrollment() {
                     </Block>
 
                     <Block middle style={{ marginTop: "4%" }}>
-                        <Image source={Images.Home.enrollment} style={{ height: Utils.height / 5, width: Utils.width / 1.2, resizeMode: "contain" }} />
+                        <Image source={Images.Home.enrollment} style={{ height: Utils.height / 6, width: Utils.width / 1.2, resizeMode: "contain" }} />
                     </Block>
                 </View>
                 <View style={styles.body}>
-                    <ScrollView showsVerticalScrollIndicator={false}>
+                    <ScrollView ref={scrollRef} onScroll={handleScroll}
+                        showsVerticalScrollIndicator={false}>
                         <RenderHtml
                             contentWidth={Utils.width}
                             source={{ html: htmlContent }}
                         />
                     </ScrollView>
+                    <Block middle>
+                        {!isAtEnd ? <Button color={Theme.COLORS.WHITE} round onPress={scrollToBottom}>
+                            <Text style={[styles.text, { fontSize: 12, color: Theme.COLORS.PRIMARY }]}>More Information</Text>
+                        </Button> :
+                            <Button color={Theme.COLORS.WHITE} round onPress={proceedToPayment}>
+                                <Text style={[styles.text, { fontSize: 12 }]}>Procced to Payment</Text>
+                            </Button>
+                        }
+                    </Block>
+                </View>
+                <View style={styles.footer}>
 
                 </View>
 
@@ -59,9 +97,11 @@ const styles = StyleSheet.create({
 
     },
     body: {
+        flex: 8
 
     },
     footer: {
+        flex: 1
 
     },
     text: {

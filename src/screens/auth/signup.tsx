@@ -1,19 +1,52 @@
 import { View, Text, StyleSheet, Image } from 'react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { AuthStackProps } from '../../navigators/authStack';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Block, Button, Icon, Input } from 'galio-framework';
 import { Utils, Images, Theme } from '../../constants';
 import CheckBox from '../../components/CheckBox';
+import { registerPost } from '../../networking/resp-type';
+import { useMutation } from 'react-query';
+import { ApiController } from '../../networking';
+import { AppLoader } from '../../components';
 
 
 type SignupProps = AuthStackProps<"register">;
 export default function Signup(props: SignupProps) {
   const { navigation } = props;
+  const [postData, setPostData] = useState<registerPost>({ email: "", phone: "", password: "" });
+  const [rePass, setRePass] = useState<string>("");
+  const [disabled, setPostDisabled] = useState<boolean>(true);
   const [checked, setChecked] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (checked && rePass === postData.password) {
+      setPostDisabled(() => false)
+    }
+    else {
+      setPostDisabled(() => true)
+    }
+  }, [checked, rePass, postData])
+
+  const registerMutation = useMutation({
+    mutationFn: (input: registerPost) => {
+      return ApiController.register(input)
+    },
+    onSuccess: (data) => {
+      navigation.navigate("otp")
+    },
+    onError: (error) => {
+      console.log(error)
+    }
+  })
+
+  const register = () => {
+    registerMutation.mutate(postData)
+  }
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <View style={styles.container}>
+        <AppLoader show={registerMutation.isLoading} />
         <View style={styles.header}>
 
           <Block height={30} width={30} middle style={{ backgroundColor: Theme.COLORS.WHITE, borderRadius: 15 }}>
@@ -44,6 +77,11 @@ export default function Signup(props: SignupProps) {
               left
               icon='email'
               family="MaterialCommunityIcons"
+              onChangeText={(text) => {
+                setPostData((prev) => {
+                  return { ...prev, email: text }
+                })
+              }}
               textInputStyle={[styles.textTitle, { fontSize: 14, color: Theme.COLORS.BLACK }]}
             />
           </Block>
@@ -58,6 +96,11 @@ export default function Signup(props: SignupProps) {
               left
               icon='call'
               family="Ionicons"
+              onChangeText={(text) => {
+                setPostData((prev) => {
+                  return { ...prev, phone: text }
+                })
+              }}
               textInputStyle={[styles.textTitle, { fontSize: 14, color: Theme.COLORS.BLACK }]}
             />
           </Block>
@@ -74,6 +117,11 @@ export default function Signup(props: SignupProps) {
               password
               viewPass
               iconColor={Theme.COLORS.BORDER_COLOR}
+              onChangeText={(text) => {
+                setPostData((prev) => {
+                  return { ...prev, password: text }
+                })
+              }}
               textInputStyle={[styles.textTitle, { fontSize: 14, color: Theme.COLORS.BLACK }]}
             />
 
@@ -89,6 +137,9 @@ export default function Signup(props: SignupProps) {
               style={{ borderRadius: 18 }}
               password
               viewPass
+              onChangeText={(text) => {
+                setRePass(() => text)
+              }}
               iconColor={Theme.COLORS.BORDER_COLOR}
               textInputStyle={[styles.textTitle, { fontSize: 14, color: Theme.COLORS.BLACK }]}
             />
@@ -98,9 +149,7 @@ export default function Signup(props: SignupProps) {
         </View>
         <View style={styles.footer}>
           <Block middle gap={25}>
-            <Button round color={Theme.COLORS.WHITE} style={{ width: "100%" }} onPress={() => {
-              navigation.navigate("phoneNumber")
-            }}>
+            <Button round color={Theme.COLORS.WHITE} disabled={disabled} style={{ width: "100%" }} onPress={register}>
               <Text style={[styles.textTitle, { fontSize: 15, color: Theme.COLORS.ACTIVE }]}>Sign Up</Text>
             </Button>
             <Block style={{ width: "80%" }} middle gap={25}>

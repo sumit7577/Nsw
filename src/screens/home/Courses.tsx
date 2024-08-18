@@ -4,26 +4,46 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import { Images, Theme, Utils } from '../../constants'
 import { Block, Icon } from 'galio-framework'
 import { chunk } from "lodash";
+import { TabProps } from '../../navigators/bottomNavigator'
+import { useQuery } from 'react-query'
+import { ApiController } from '../../networking'
+import { UnpaidCourse } from '../../networking/resp-type'
+import { AppLoader } from '../../components'
 
+interface courseItemProps {
+    data: UnpaidCourse,
+    onClick: () => void,
+}
 
-const CourseItem = () => {
+const CourseItem = (props: courseItemProps) => {
+    const { data, onClick } = props;
     return (
-        <TouchableOpacity>
+        <TouchableOpacity onPress={onClick}>
             <Block middle style={{ backgroundColor: Theme.COLORS.WHITE, borderRadius: 8, padding: "3%" }} gap={4}>
-                <Text style={[styles.text, { fontSize: 8 }]}>DevOps Training</Text>
-                <Image source={Images.Home.devops} style={{ height: 50, width: 65 }} resizeMode="contain" />
+                <Text style={[styles.text, { fontSize: 8 }]}>{data.name}</Text>
+                <Image defaultSource={Images.Home.devops} src={data.image}
+                    style={{ height: 50, width: 65 }} resizeMode="contain" />
             </Block>
         </TouchableOpacity>
     )
 
 }
-
-export default function Courses() {
-    const data = Array.from({ length: 8 }, (index) => index)
-    const chunkedData = chunk(data, 3);
+type CourseProps = TabProps<"Course">
+export default function Courses(props: CourseProps) {
+    const { data, isLoading, isError } = useQuery({
+        queryFn: ApiController.getCourses,
+        queryKey: ["course"]
+    })
+    const chunkedData = chunk(data?.results, 3);
+    const navigateToDetail = (id: number) => {
+        props.navigation.navigate("Search",
+            { id: id }
+        )
+    }
     return (
         <SafeAreaView style={{ flex: 1 }}>
             <View style={styles.container}>
+                <AppLoader show={isLoading} />
                 <View style={styles.header}>
                     <Block row space='between' middle>
                         <Block height={30} width={30} middle style={{ backgroundColor: Theme.COLORS.WHITE, borderRadius: 15 }}>
@@ -48,7 +68,9 @@ export default function Courses() {
                             renderItem={({ item, index, separators }) => (
                                 <Block row space='between' style={{ width: "100%", marginTop: "4%" }} middle>
                                     {item.map((subItem, subIndex) => (
-                                        <CourseItem />
+                                        <CourseItem data={subItem} key={subIndex} onClick={() => {
+                                            navigateToDetail(subItem.id)
+                                        }} />
                                     ))}
                                 </Block>
                             )} />

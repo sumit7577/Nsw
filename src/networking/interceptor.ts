@@ -3,7 +3,7 @@ import { AuthenticationError, ServerError, NetworkError, ClientError } from "./e
 import { loginResp } from "./resp-type"
 import AppStorge from "../constants/database";
 
-const shopName = "http://3.210.206.236/";
+const shopName = "https://nswtest.pythonanywhere.com";
 //const shopName = "http://192.168.2.188:8000/";
 
 const client = Axios.create({
@@ -13,11 +13,9 @@ const client = Axios.create({
 });
 
 client.interceptors.request.use(async (request:any) => {
-    //console.log("request",request);
-    const database = AppStorge.getString("user.token");
-    if (database) {
-        const response:loginResp= JSON.parse(database);
-        request.headers['Authorization'] = `Token ${response.message}`;
+    const token = AppStorge.getString("token");
+    if (token) {
+        request.headers['Authorization'] = `Token ${token}`;
     }
     return request;
 });
@@ -41,7 +39,7 @@ client.interceptors.response.use(
         } else if (error.response.status >= 400 && error.response.status < 500) {
             return Promise.reject(
                 new ClientError(
-                    Object.entries(error.response.data).join(" ").replace(","," "),
+                    Object.entries(error.response.data.errors).join(" ").replace(","," "),
                     error.response.status
                 )
             );
