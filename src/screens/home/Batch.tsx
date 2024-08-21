@@ -1,5 +1,5 @@
-import { View, Text, StyleSheet, Image, FlatList } from 'react-native'
-import React from 'react'
+import { View, Text, StyleSheet, Image, FlatList, NativeSyntheticEvent, NativeScrollEvent } from 'react-native'
+import React, { useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { Block, Button, Icon } from 'galio-framework'
 import { Images, Theme, Utils } from '../../constants'
@@ -9,62 +9,49 @@ import { AppLoader, AppPager } from '../../components'
 import { ApiController } from '../../networking'
 import { UnpaidCourse } from '../../networking/resp-type'
 import { chunk } from 'lodash'
+import { PageIndicator } from 'react-native-page-indicator'
 
 
 
 
 const ScrollBarItem = (props: { data: UnpaidCourse[] }) => {
     const { data } = props;
-    //const startTime = data.teaching_time_start && new Date(data.teaching_time_start).getHours()
-    //const endTime = data.teaching_time_end && new Date(data.teaching_time_end).getHours()
 
     return (
-        <Block space="between">
-            {data.map((item, index) => (
-                <Block row space='between' middle key={index}>
-                    <Block style={{ backgroundColor: Theme.COLORS.WHITE, padding: "3%", paddingHorizontal: "8%", borderRadius: 8, bottom: -20 }} middle>
-                        <Image src={item.image} style={{ height: 80, width: 100 }} resizeMode="contain" />
-                        <Text style={[styles.text, { color: Theme.COLORS.BLACK, fontSize: 12 }]}>Starting from- {Utils.dateFormatter(item.starting_date, "en", {
-                            day: "numeric",
-                            month: "short"
-                        })}
-                        </Text>
-                        <Text style={[styles.text, { color: Theme.COLORS.BLACK, fontSize: 10, fontFamily: Theme.FONTFAMILY.BOLD }]}>Time : {Utils.dateFormatter(item.teaching_time_start, "en", {
-                            weekday: "short"
-                        })} to {Utils.dateFormatter(item.teaching_time_end, "en", {
-                            weekday: "long"
-                        })} {'\n'} Weekend Batch - 2hrs
-                        </Text>
+        <Block space="between" style={{}} gap={10}>
+            {data.map((item, index) => {
+                const startTime = item.teaching_time_start && new Date(item.teaching_time_start).getHours()
+                const endTime = item.teaching_time_end && new Date(item.teaching_time_end).getHours()
+                return (
+                    <Block row space='between' middle key={index}>
+                        {index === 1 &&
+                            <Block style={{ width: "50%" }} middle>
+                                <Image source={Images.Home.course1} style={{ height: 140, width: 120 }} resizeMode="cover" />
+                            </Block>
+                        }
+                        <Block style={{ backgroundColor: Theme.COLORS.WHITE, padding: "3%", paddingHorizontal: "8%", borderRadius: 8, top: index === 1 ? -15 : 15 }} middle>
+                            <Image src={item.image} style={{ height: 80, width: 100 }} resizeMode="contain" />
+                            <Text style={[styles.text, { color: Theme.COLORS.BLACK, fontSize: 12 }]}>Starting from- {Utils.dateFormatter(item.starting_date, "en", {
+                                day: "numeric",
+                                month: "short"
+                            })}
+                            </Text>
+                            <Text style={[styles.text, { color: Theme.COLORS.BLACK, fontSize: 10, fontFamily: Theme.FONTFAMILY.BOLD }]}>Time : {Utils.dateFormatter(item.teaching_time_start, "en", {
+                                weekday: "short"
+                            })} to {Utils.dateFormatter(item.teaching_time_end, "en", {
+                                weekday: "long"
+                            })} {startTime}-{endTime}{'\n'} Weekend Batch - 2hrs
+                            </Text>
+                        </Block>
+
+                        {index === 0 && <Block style={{ width: "50%" }} middle>
+                            <Image source={Images.Home.course2} style={{ height: 100, width: 100 }} resizeMode="contain" />
+                        </Block>
+                        }
+
                     </Block>
-
-                    <Block style={{ width: "50%" }} middle>
-                        <Image source={Images.Home.course2} style={{ height: 100, width: 100 }} resizeMode="contain" />
-                    </Block>
-
-                </Block>
-            ))}
-
-
-            {/*<Block row space='between' middle>
-                <Block style={{ width: "50%" }} middle>
-                    <Image source={Images.Home.course1} style={{ height: 140, width: 120 }} resizeMode="cover" />
-                </Block>
-
-                <Block style={{ backgroundColor: Theme.COLORS.WHITE, padding: "3%", paddingHorizontal: "8%", borderRadius: 8, top: -25 }} middle>
-                    <Image src={data.image} style={{ height: 80, width: 100 }} resizeMode="contain" />
-                    <Text style={[styles.text, { color: Theme.COLORS.BLACK, fontSize: 12 }]}>Starting from- {Utils.dateFormatter(data.starting_date, "en", {
-                        day: "numeric",
-                        month: "short"
-                    })}
-                    </Text>
-                    <Text style={[styles.text, { color: Theme.COLORS.BLACK, fontSize: 10, fontFamily: Theme.FONTFAMILY.BOLD }]}>Time : {Utils.dateFormatter(data.teaching_time_start, "en", {
-                        weekday: "short"
-                    })} to {Utils.dateFormatter(data.teaching_time_end, "en", {
-                        weekday: "long"
-                    })} {startTime}-{endTime}{'\n'} Weekend Batch - 2hrs
-                    </Text>
-                </Block>
-            </Block>*/}
+                )
+            })}
         </Block>
     )
 }
@@ -72,6 +59,7 @@ const ScrollBarItem = (props: { data: UnpaidCourse[] }) => {
 type BatchProps = TabProps<"Batch">
 export default function Batch(props: BatchProps) {
     const { route, navigation } = props;
+    const [currentPage, setCurrentPage] = useState(0);
     const { data, isLoading, isError } = useQuery({
         queryFn: ApiController.getCourses,
         queryKey: ["course"]
@@ -82,6 +70,11 @@ export default function Batch(props: BatchProps) {
         })
     }
     const chunkedData = chunk(data?.results, 2);
+    const onScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
+        const contentOffsetX = event.nativeEvent.contentOffset.x;
+        const index = Math.round(contentOffsetX / Utils.width);
+        setCurrentPage(index);
+    };
     return (
         <SafeAreaView style={{ flex: 1 }}>
             <View style={styles.container}>
@@ -100,12 +93,21 @@ export default function Batch(props: BatchProps) {
                 </View>
 
                 <View style={styles.body}>
-                    <Block gap={10}>
+                    <Block space='between' gap={14}>
 
-                        <FlatList data={chunkedData} horizontal showsVerticalScrollIndicator={false}
+                        <FlatList data={chunkedData} horizontal
+                            onScroll={onScroll}
+                            showsHorizontalScrollIndicator={false} pagingEnabled={true}
                             renderItem={({ item, index, separators }) => (
-                                <ScrollBarItem data={item} key={index} />
+                                <Block style={{ width: Utils.width / 1.1, height: "100%", padding: "2%" }}>
+                                    <ScrollBarItem data={item} key={index} />
+                                </Block>
+
                             )} />
+                        <Block middle>
+                            <PageIndicator count={chunkedData.length} current={currentPage} variant="beads" />
+                        </Block>
+
                         <Block gap={20}>
                             <Block gap={6}>
                                 <Text style={[styles.text, { fontFamily: Theme.FONTFAMILY.BOLD, fontSize: 16 }]}>Fee Structure</Text>
@@ -174,7 +176,7 @@ const styles = StyleSheet.create({
 
     },
     footer: {
-        flex: 1
+
     },
     text: {
         fontFamily: Theme.FONTFAMILY.REGULAR,

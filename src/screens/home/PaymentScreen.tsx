@@ -5,23 +5,29 @@ import { TabProps } from '../../navigators/bottomNavigator'
 import { Block, Icon } from 'galio-framework'
 import { Images, Theme, Utils } from '../../constants'
 import { shopName } from '../../networking/interceptor'
-import WebView from 'react-native-webview'
+import WebView, { WebViewMessageEvent } from 'react-native-webview'
 import userAuth from '../../hooks/auth'
-import { AppLoader } from '../../components'
+import { AppLoader, AppModal } from '../../components'
 
 type PaymentScreenProps = TabProps<"Payment">
 
 export default function PaymentScreen(props: PaymentScreenProps) {
     const { navigation, route } = props;
     const [loading, setLoading] = useState<boolean>(true);
+    const [paymentSuccessfull, setPaymentSuccessfull] = useState<boolean>(false);
     const { token } = userAuth()
     const paymentLink = `${shopName}/checkout/${route.params.id}`;
     const headers = {
         'Authorization': `Token ${token}`,
     };
+    const onMessage = (event: WebViewMessageEvent) => {
+        const data: { success: boolean, message: string } = JSON.parse(event.nativeEvent.data)
+        setPaymentSuccessfull(() => data.success)
+    };
     return (
         <SafeAreaView style={{ flex: 1 }}>
             <AppLoader show={loading} />
+            <AppModal />
             <View style={styles.container}>
                 <View style={styles.header}>
                     <Block row space='between' middle>
@@ -41,6 +47,7 @@ export default function PaymentScreen(props: PaymentScreenProps) {
                         setLoading(() => false)
                     }}
                         source={{ uri: paymentLink, headers: headers }}
+                        onMessage={onMessage}
                     />
 
                 </View>
