@@ -1,7 +1,7 @@
 import { View, Text, StyleSheet, Image } from 'react-native'
 import React, { useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { TabProps } from '../../navigators/bottomNavigator'
+import { HomeProps, TabProps } from '../../navigators/bottomNavigator'
 import { Block, Icon } from 'galio-framework'
 import { Images, Theme, Utils } from '../../constants'
 import { shopName } from '../../networking/interceptor'
@@ -9,7 +9,7 @@ import WebView, { WebViewMessageEvent } from 'react-native-webview'
 import userAuth from '../../hooks/auth'
 import { AppLoader, AppModal } from '../../components'
 
-type PaymentScreenProps = TabProps<"Payment">
+type PaymentScreenProps = HomeProps<"Payment">
 
 export default function PaymentScreen(props: PaymentScreenProps) {
     const { navigation, route } = props;
@@ -23,11 +23,15 @@ export default function PaymentScreen(props: PaymentScreenProps) {
     const onMessage = (event: WebViewMessageEvent) => {
         const data: { success: boolean, message: string } = JSON.parse(event.nativeEvent.data)
         setPaymentSuccessfull(() => data.success)
-    };
+    }
+
+    const onDone= ()=>{
+        navigation.navigate("Home")
+    }
     return (
         <SafeAreaView style={{ flex: 1 }}>
             <AppLoader show={loading} />
-            <AppModal />
+            <AppModal show={paymentSuccessfull} onDone={onDone}/>
             <View style={styles.container}>
                 <View style={styles.header}>
                     <Block row space='between' middle>

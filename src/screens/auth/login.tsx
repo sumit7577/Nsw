@@ -7,7 +7,9 @@ import { Utils, Images, Theme } from '../../constants';
 import AppStorge from '../../constants/database';
 import { useMutation, useQuery } from 'react-query';
 import { ApiController } from '../../networking';
-import { AppLoader } from '../../components';
+import { AppLoader, AppModal } from '../../components';
+import Toast from 'react-native-toast-message';
+import { ClientError } from '../../networking/error-type';
 
 
 type LoginProps = AuthStackProps<"login">;
@@ -27,8 +29,13 @@ export default function Login(props: LoginProps) {
       AppStorge.setMapAsync("user", data.user)
       AppStorge.setStringAsync("token", data.token)
     },
-    onError: (data) => {
-      console.log("error", data)
+    onError: (data: ClientError) => {
+      Toast.show({
+        type: "error",
+        text1: "Error!",
+        text2: data.message ?? "something went wrong!",
+        position: "bottom"
+      })
     }
   })
 
@@ -42,7 +49,9 @@ export default function Login(props: LoginProps) {
         <View style={styles.header}>
 
           <Block height={30} width={30} middle style={{ backgroundColor: Theme.COLORS.WHITE, borderRadius: 15 }}>
-            <Icon family="Entypo" name="chevron-left" size={22} color={Theme.COLORS.MUTED} />
+            <Icon family="Entypo" name="chevron-left" size={22} color={Theme.COLORS.MUTED} onPress={() => {
+              navigation.goBack()
+            }} />
           </Block>
 
           <Block>
@@ -107,6 +116,8 @@ export default function Login(props: LoginProps) {
           </Block>
 
         </View>
+
+        <Toast />
 
       </View>
 

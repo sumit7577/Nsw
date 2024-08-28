@@ -4,7 +4,7 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import { Images, Theme, Utils } from '../../constants'
 import { Block, Icon } from 'galio-framework'
 import { chunk } from "lodash";
-import { TabProps } from '../../navigators/bottomNavigator'
+import { TabProps, TabScreenProps } from '../../navigators/bottomNavigator'
 import { useQuery } from 'react-query'
 import { ApiController } from '../../networking'
 import { UnpaidCourse } from '../../networking/resp-type'
@@ -28,7 +28,7 @@ const CourseItem = (props: courseItemProps) => {
     )
 
 }
-type CourseProps = TabProps<"Course">
+type CourseProps = TabScreenProps<"Course">
 export default function Courses(props: CourseProps) {
     const { data, isLoading, isError } = useQuery({
         queryFn: ApiController.getCourses,
@@ -36,7 +36,7 @@ export default function Courses(props: CourseProps) {
     })
     const chunkedData = chunk(data?.results, 3);
     const navigateToDetail = (id: number) => {
-        props.navigation.navigate("Search",
+        props.navigation.navigate("Enrollment",
             { id: id }
         )
     }
@@ -47,7 +47,9 @@ export default function Courses(props: CourseProps) {
                 <View style={styles.header}>
                     <Block row space='between' middle>
                         <Block height={30} width={30} middle style={{ backgroundColor: Theme.COLORS.WHITE, borderRadius: 15 }}>
-                            <Icon family="Entypo" name="chevron-left" size={25} />
+                            <Icon family="Entypo" name="chevron-left" size={22} color={Theme.COLORS.MUTED} onPress={() => {
+                                props.navigation.goBack()
+                            }} />
                         </Block>
                         <Block style={{ backgroundColor: Theme.COLORS.WHITE, padding: 4, borderRadius: 8 }}>
                             <Image source={Images.Home.logo} style={{ height: 40, width: Utils.width / 2.5 }} resizeMode="contain" />

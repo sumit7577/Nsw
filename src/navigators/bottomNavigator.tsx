@@ -1,26 +1,51 @@
 import { BottomTabBarProps, BottomTabScreenProps, createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { TouchableOpacity, View, Text } from "react-native";
 import { Theme, Utils } from "../constants";
-import { Home, Courses } from "../screens/home";
+import { Home, Courses, Enrollment, Search, Message, Batch, PaymentScreen } from "../screens/home";
 import { Block, Icon } from "galio-framework";
-import Enrollment from "../screens/home/Enrollment";
 import { SingleCourseResp } from "../networking/resp-type";
-import Batch from "../screens/home/Batch";
-import PaymentScreen from "../screens/home/PaymentScreen";
+import { createNativeStackNavigator, NativeStackScreenProps } from "@react-navigation/native-stack";
+import type { CompositeScreenProps } from '@react-navigation/native';
+
+
+
+export type HomeStackParamList = {
+    Home: undefined,
+    Enrollment: { id: number },
+    Batch: { course: SingleCourseResp },
+    Payment: { id: number }
+}
+
+const HomeStack = createNativeStackNavigator<HomeStackParamList>();
+
+
+const HomeStackNavigator = () => {
+    return (
+        <HomeStack.Navigator screenOptions={{ headerShown: false }}>
+            <HomeStack.Screen name="Home" component={Home} />
+            <HomeStack.Screen name="Enrollment" component={Enrollment} />
+            <HomeStack.Screen name="Batch" component={Batch} />
+            <HomeStack.Screen name="Payment" component={PaymentScreen} />
+        </HomeStack.Navigator>
+    );
+};
 
 
 type TabParamList = {
     Home: undefined,
     Course: undefined,
     Search: { id: number },
-    Message: undefined,
-    Batch: { course: SingleCourseResp }
-    Payment: { id: number },
+    Message: undefined
 }
 
 const Tab = createBottomTabNavigator<TabParamList>();
 
 export type TabProps<T extends keyof TabParamList> = BottomTabScreenProps<TabParamList, T>
+export type HomeProps<T extends keyof HomeStackParamList> = NativeStackScreenProps<HomeStackParamList, T>
+
+export type TabScreenProps<T extends keyof TabParamList> = CompositeScreenProps<TabProps<T>,
+    HomeProps<keyof HomeStackParamList>
+>
 
 interface iconsProp {
     name: string,
@@ -138,12 +163,10 @@ const BottomTabNavigator = () => {
             tabBar={(props) => <CustomBar {...props} />} initialRouteName="Home" screenOptions={{
                 headerShown: false
             }}>
-            <Tab.Screen name="Home" component={Home} />
+            <Tab.Screen name="Home" component={HomeStackNavigator} />
             <Tab.Screen name="Course" component={Courses} />
-            <Tab.Screen name="Search" component={Enrollment} />
-            <Tab.Screen name="Message" component={Home} />
-            <Tab.Screen name="Batch" component={Batch} />
-            <Tab.Screen name="Payment" component={PaymentScreen} />
+            <Tab.Screen name="Search" component={Search} />
+            <Tab.Screen name="Message" component={Message} />
         </Tab.Navigator>
     )
 }

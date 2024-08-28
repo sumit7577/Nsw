@@ -16,9 +16,7 @@ export default function Home(props: HomeProps) {
       <View style={styles.container}>
         <View style={styles.header}>
           <Block row space='between' middle>
-            <Block height={30} width={30} middle style={{ backgroundColor: Theme.COLORS.WHITE, borderRadius: 15 }}>
-              <Icon family="Entypo" name="chevron-left" size={25} onPre/>
-            </Block>
+            <Block />
             <Block style={{ backgroundColor: Theme.COLORS.WHITE, padding: 4, borderRadius: 8 }}>
               <Image source={Images.Home.logo} style={{ height: 40, width: Utils.width / 2.5 }} resizeMode="contain" />
             </Block>

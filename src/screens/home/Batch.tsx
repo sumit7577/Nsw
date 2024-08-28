@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { Block, Button, Icon } from 'galio-framework'
 import { Images, Theme, Utils } from '../../constants'
-import { TabProps } from '../../navigators/bottomNavigator'
+import { HomeProps, TabProps } from '../../navigators/bottomNavigator'
 import { QueryCache, useQuery } from 'react-query'
 import { AppLoader, AppPager } from '../../components'
 import { ApiController } from '../../networking'
@@ -56,7 +56,7 @@ const ScrollBarItem = (props: { data: UnpaidCourse[] }) => {
     )
 }
 
-type BatchProps = TabProps<"Batch">
+type BatchProps = HomeProps<"Batch">
 export default function Batch(props: BatchProps) {
     const { route, navigation } = props;
     const [currentPage, setCurrentPage] = useState(0);
@@ -112,7 +112,7 @@ export default function Batch(props: BatchProps) {
                             <Block gap={6}>
                                 <Text style={[styles.text, { fontFamily: Theme.FONTFAMILY.BOLD, fontSize: 16 }]}>Fee Structure</Text>
                                 <Block style={{ marginLeft: "10%" }} gap={2}>
-                                    <Text style={styles.text}>Registration Fees: 25k</Text>
+                                    <Text style={styles.text}>Registration Fees: Rs. {route.params.course.data.registration_fees}</Text>
                                     <Text style={styles.text}>you can pay in {route.params.course.installment.length} installments like</Text>
                                     {route.params.course.installment.map((item, index) => (
                                         <Block key={index}>

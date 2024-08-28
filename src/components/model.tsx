@@ -1,29 +1,33 @@
 import { View, Text, StyleSheet, Modal } from 'react-native'
-import React from 'react'
+import React, { useState } from 'react'
 import { Block, Button, Icon } from 'galio-framework'
 import { Theme, Utils } from '../constants'
 
 interface ModalProps {
   show: boolean,
   text?: string,
-  button?: string
+  button?: string,
+  onDone: () => void;
+  description?: string
 }
 
-export default function Model() {
+export default function Model(props: ModalProps) {
+  const { show, text, button, onDone, description } = props;
   return (
-    <View >
-      <Modal transparent={true} animationType={'none'} visible={true}>
+    <View>
+      <Modal transparent={true} animationType={'none'} visible={show}>
         <View style={styles.modalBackground}>
           <Block style={styles.modal} >
             <Block middle gap={12} center style={{ height: "50%" }}>
               <Block style={{ backgroundColor: Theme.COLORS.PRIMARY, height: 50, width: 50, borderRadius: 25 }} center middle>
                 <Icon name="done" family="MaterialIcons" color={Theme.COLORS.WHITE} size={30} />
               </Block>
-              <Text style={[styles.text]}>Payment Successfully</Text>
+              <Text style={[styles.text]}>{text ?? "Payment Successfull!"}</Text>
+              {description && <Text style={[styles.text, { fontSize: 12, maxWidth: Utils.width / 1.8, textAlign: "center" }]}>{description}</Text>}
             </Block>
 
-            <Button color={Theme.COLORS.PRIMARY} style={{ borderRadius: 12, width: Utils.width / 1.6 }}>
-              <Text style={[styles.text, { color: Theme.COLORS.WHITE }]}>Done</Text>
+            <Button color={Theme.COLORS.PRIMARY} style={{ borderRadius: 12, width: Utils.width / 1.6 }} onPress={onDone}>
+              <Text style={[styles.text, { color: Theme.COLORS.WHITE }]}>{button ?? "Done"}</Text>
             </Button>
           </Block>
         </View>
@@ -38,7 +42,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flexDirection: 'column',
     justifyContent: 'space-around',
-    backgroundColor: '#00000040'
+    backgroundColor: Theme.COLORS.PRIMARY
   },
   modal: {
     display: "flex",

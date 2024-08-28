@@ -39,7 +39,7 @@ client.interceptors.response.use(
         } else if (error.response.status >= 400 && error.response.status < 500) {
             return Promise.reject(
                 new ClientError(
-                    Object.entries(error.response.data.errors).join(" ").replace(","," "),
+                    error.response.data.message ?? Object.entries(error.response.data.errors).join(" ").replace(","," "),
                     error.response.status
                 )
             );

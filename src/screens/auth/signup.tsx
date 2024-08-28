@@ -8,7 +8,9 @@ import CheckBox from '../../components/CheckBox';
 import { registerPost } from '../../networking/resp-type';
 import { useMutation } from 'react-query';
 import { ApiController } from '../../networking';
-import { AppLoader } from '../../components';
+import { AppLoader, AppModal } from '../../components';
+import { ClientError } from '../../networking/error-type';
+import Toast from 'react-native-toast-message';
 
 
 type SignupProps = AuthStackProps<"register">;
@@ -35,8 +37,13 @@ export default function Signup(props: SignupProps) {
     onSuccess: (data) => {
       navigation.navigate("otp")
     },
-    onError: (error) => {
-      console.log(error)
+    onError: (data: ClientError) => {
+      Toast.show({
+        type: "error",
+        text1: "Error!",
+        text2: data.message ?? "something went wrong!",
+        position: "bottom"
+      })
     }
   })
 
@@ -169,6 +176,8 @@ export default function Signup(props: SignupProps) {
           </Block>
 
         </View>
+
+        <Toast />
 
       </View>
 

@@ -8,8 +8,10 @@ import { OtpInput } from "react-native-otp-entry";
 import { useMutation } from 'react-query';
 import { otpPost } from '../../networking/resp-type';
 import { ApiController } from '../../networking';
-import { AppLoader } from '../../components';
+import { AppLoader, AppModal } from '../../components';
 import AppStorge from '../../constants/database';
+import Toast from 'react-native-toast-message';
+import { ClientError } from '../../networking/error-type';
 
 
 type OtpProps = AuthStackProps<"otp">;
@@ -21,20 +23,33 @@ export default function Otp(props: OtpProps) {
     mutationFn: (input: otpPost) => {
       return ApiController.otpVerify(input)
     },
-    onSuccess: (data) => {
-      AppStorge.setMapAsync("user", data.user)
-      AppStorge.setStringAsync("token", data.token)
+    onError: (data: ClientError) => {
+      Toast.show({
+        type: "error",
+        text1: "Error!",
+        text2: data.message ?? "something went wrong!",
+        position: "bottom"
+      })
     }
   })
 
   const create = () => {
     otpMutation.mutate(otp)
   }
+
+  const onDone = () => {
+    if (otpMutation.data) {
+      AppStorge.setMapAsync("user", otpMutation.data?.user)
+      AppStorge.setStringAsync("token", otpMutation.data.token)
+    }
+
+  }
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <View style={styles.container}>
         <AppLoader show={otpMutation.isLoading} />
         <View style={styles.header}>
+          <AppModal show={otpMutation.isSuccess} text="Success!" onDone={onDone} description='Congratulations, you have create the account !' />
 
           <Block height={30} width={30} middle style={{ backgroundColor: Theme.COLORS.WHITE, borderRadius: 15 }} >
             <Icon family="Entypo" name="chevron-left" size={22} color={Theme.COLORS.MUTED} onPress={() => {
@@ -75,6 +90,7 @@ export default function Otp(props: OtpProps) {
           </Block>
 
         </View>
+        <Toast />
 
       </View>
 

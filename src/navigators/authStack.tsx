@@ -15,7 +15,7 @@ export type AuthStackProps<T extends keyof AuthStackParamList> = NativeStackScre
 
 export default function AuthStackNavigator() {
     return (
-        <Stack.Navigator screenOptions={{ headerShown: false }} initialRouteName="login">
+        <Stack.Navigator screenOptions={{ headerShown: false }} initialRouteName="onBoarding">
             <Stack.Screen name="onBoarding" component={OnBoardingScreen} />
             <Stack.Screen name="login" component={LoginScreen} />
             <Stack.Screen name="register" component={SignUp} />
